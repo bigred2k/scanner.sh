@@ -47,6 +47,13 @@ echo
 mkdir -p /opt/scripts/
 rm -rf /opt/scripts/scan_results.txt
 
+# Maldet scan
+echo "Scanning with maldet. This could take awhile."
+maldet -u
+freshclam
+maldet -a /
+echo "Maldet scan complete"
+
 # Maldet results from last scan
 echo "Getting Maldet results from last scan and adding to /opt/scripts/scan_results.txt"
 echo "During a routine scan of your server, $hostname, we detected one or more suspicious files indicating the presence of malware on your server. Most often these are a result of an out of date or unpatched CMS, or unpatched plugins or themes.
@@ -102,11 +109,11 @@ echo
 
 # Binaries within /var/www/ /var/tmp/ /var/lib/dav/ /tmp/ and /dev/shm/
 echo "Step 4 of 5"
-echo "Searching for Binary files within /var/www/, /var/tmp, /var/lib/dav,/tmp and /dev/shm/ . This can take awhile, please be patient. " 
-echo "Binary files found within /var/www/, /var/tmp, /var/lib/dav and /tmp . " >> /opt/scripts/scan_results.txt
+echo "Searching for Binary files within /dev/shm, /var/tmp, /var/lib/dav, and /var/www/ . This can take awhile, please be patient. " 
+echo "Binary files found within /dev/shm/, /var/tmp, /var/lib/dav, /tmp and /var/www/ . " >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit files:" >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
-find /var/www/ /var/tmp/ /var/lib/dav/ /tmp/ /dev/shm/ -type f -exec file -i '{}' \; | grep 'x-executable; charset=binary' >> /opt/scripts/scan_results.txt
+find /dev/shm/ /var/tmp/ /var/lib/dav/ /tmp/ /var/www/ -type f -exec file -i '{}' \; | grep 'x-executable; charset=binary' >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "Binary file scan complete"
@@ -119,7 +126,7 @@ echo "Step 5 of 5"
 echo "Scanning for files and directories owned $webuser:$webuser within /tmp, /var/tmp, /var/www and /dev/shm/. " 
 echo "Files and directories owned apache:apache within /tmp, /var/tmp, /var/lib/dav, /var/www and /dev/shm:" >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit files:" >> /opt/scripts/scan_results.txt
-find /tmp/ /var/tmp/ /var/lib/dav/ /var/www/ /dev/shm/ -user $webuser -group $webuser | grep -v '.css\|.js' >> /opt/scripts/scan_results.txt
+find /tmp/ /var/tmp/ /dev/shm/ /var/lib/dav/ /var/www/ -user $webuser -group $webuser | grep -v '.css\|.js' >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "Scan complete. Results are in /opt/scripts/scan_results.txt"
