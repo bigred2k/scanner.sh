@@ -8,28 +8,36 @@ docroots="$(cat /etc/httpd/conf.d/*.conf |grep DocumentRoot | grep -v '#'|awk '{
 hostname="$(hostname)"
 sendmailqueue="$(mailq | tail -n1 | awk '{print $3}')"
 postfixmailqueue="$(mailq | tail -n1 | awk '{print $5}')"
-webuser="apache"
+webuser="unknown"
+arch="$(head -n1 /etc/issue)"
 
-#Hostname
+
+if [[ "$arch" == *"CentOS"* ]]; then
+   webuser="apache"
+elif [[ "$arch" == *"Ubuntu"* ]]; then
+   webuser="www-data"
+fi
+
+# Hostname
 echo "Hostname: $hostname"
 echo
 
-#Uptime
+# Uptime
 echo "Uptime:"
 echo "$uptime"
 echo
 
-#Free Memory
+# Free Memory
 echo "Memory Usage (Gigabytes):"
 echo "$freemem"
 echo
 
-#Disk Space
+# Disk Space
 echo "Disk Space:"
 echo "$freedisk"
 echo
 
-#Mail Queue
+# Mail Queue
 if pgrep -x "master" > /dev/null;
 then
     echo "Postfix Queue: $postfixmailqueue"
@@ -43,9 +51,14 @@ echo
 echo
 
 
-#Clean up from last run
-mkdir -p /opt/scripts/
-rm -rf /opt/scripts/scan_results.txt
+# Clean up from last run
+if [ ! -d "/opt/scripts/" ]; then
+  mkdir -p /opt/scripts/
+fi
+
+if [ -f "/opt/scripts/scan_results.txt" ]; then
+  rm -rf /opt/scripts/scan_results.txt
+fi
 
 # Maldet scan
 echo "Scanning with maldet. This could take awhile."
