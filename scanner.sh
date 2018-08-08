@@ -43,6 +43,24 @@ echo
 echo
 
 
+# Maldet results from last scan
+echo "Getting Maldet results from last scan"
+echo "During a routine scan of your server, $hostname, we detected one or more suspicious files indicating the presence of malware on your server. Most often these are a result of an out of date or unpatched CMS, or unpatched plugins or themes.
+
+Due to security concerns, we ask that your team address this issue as soon as possible. In the event that we don't hear back that you have addressed the problematic files within the next 24 hours, we must quarantine them.
+
+If we do quarantine the files, there is a possibility that the functionality of your site(s) will be affected.
+
+Please note that it is not sufficient to simply restore from a recent backup, as it is likely that the recent backup would have these files as well.
+
+The list of files our malware scanner found:" >> /opt/scripts/scan_results.txt
+echo >> /opt/scripts/scan_results.txt
+cat $(locate $(maldet -l | grep '\-\-report' | tail -n1 |awk '{print $NF}') | grep hits) >> /opt/scripts/scan_results.txt
+echo >> /opt/scripts/scan_results.txt
+echo >> /opt/scripts/scan_results.txt
+echo "Complete"
+echo
+
 
 
 #CMS Updates Listing Routine
@@ -66,6 +84,9 @@ echo
 
 ## MALWARE HUNTING AND RELATED BELOW HERE ####
 
+
+echo "Additionally, we found the following suspicious files that may have not been detected by our malware scanning software. Please note that this secondary list is likely to contain false-positives, but should still be investigated:" >> /opt/scripts/scan_results.txt
+echo >> /opt/scripts/scan_results.txt
 
 #PHP files in /uploads/ or /files/
 echo "Step 3 of 5"
