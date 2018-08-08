@@ -70,10 +70,8 @@ echo
 #CMS Updates Listing Routine
 echo "Step 1 of 5"
 echo "Enumerating docroots"
-echo "Docroots found in /etc/httpd/conf.d/*.conf:" >> /opt/scripts/scan_results.txt
-echo "$docroots:" >> /opt/scripts/scan_results.txt
-echo >> /opt/scripts/scan_results.txt
-echo >> /opt/scripts/scan_results.txt
+echo "Docroots found in /etc/httpd/conf.d/*.conf:"
+echo "$docroots:"
 echo "Docroot enumeration complete"
 echo
 
