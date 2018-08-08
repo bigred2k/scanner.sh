@@ -43,6 +43,10 @@ echo
 echo
 
 
+#Clean up from last run
+mkdir -p /opt/scripts/
+rm -rf /opt/scripts/scan_results.txt
+
 # Maldet results from last scan
 echo "Getting Maldet results from last scan"
 echo "During a routine scan of your server, $hostname, we detected one or more suspicious files indicating the presence of malware on your server. Most often these are a result of an out of date or unpatched CMS, or unpatched plugins or themes.
@@ -55,7 +59,7 @@ Please note that it is not sufficient to simply restore from a recent backup, as
 
 The list of files our malware scanner found:" >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
-cat $(locate $(maldet -l | grep '\-\-report' | tail -n1 |awk '{print $NF}') | grep hits) >> /opt/scripts/scan_results.txt
+cat "$(locate "$(maldet -l | grep '\-\-report' | tail -n1 |awk '{print $NF}')" | grep hits)" >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "Complete"
@@ -66,8 +70,6 @@ echo
 #CMS Updates Listing Routine
 echo "Step 1 of 5"
 echo "Enumerating docroots"
-mkdir -p /opt/scripts/
-rm -rf /opt/scripts/scan_results.txt
 echo "Docroots found in /etc/httpd/conf.d/*.conf:" >> /opt/scripts/scan_results.txt
 echo "$docroots:" >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
