@@ -71,7 +71,7 @@ echo
 echo "Step 1 of 5"
 echo "Enumerating docroots"
 echo "Docroots found in /etc/httpd/conf.d/*.conf:"
-echo "$docroots:"
+echo "$docroots"
 echo "Docroot enumeration complete"
 echo
 
