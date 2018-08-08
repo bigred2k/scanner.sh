@@ -79,26 +79,26 @@ echo >> /opt/scripts/scan_results.txt
 echo "PHP file scan complete"
 echo
 
-# Binaries within /var/www/ /var/tmp/ /var/lib/dav/ /tmp/
+# Binaries within /var/www/ /var/tmp/ /var/lib/dav/ /tmp/ and /dev/shm/
 echo "Step 4 of 5"
-echo "Searching for Binary files within /var/www/, /var/tmp, /var/lib/dav and /tmp. This can take awhile, please be patient. " 
+echo "Searching for Binary files within /var/www/, /var/tmp, /var/lib/dav,/tmp and /dev/shm/ . This can take awhile, please be patient. " 
 echo "Binary files found within /var/www/, /var/tmp, /var/lib/dav and /tmp . " >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit files:" >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
-find /var/www/ /var/tmp/ /var/lib/dav/ /tmp/ -type f -exec file -i '{}' \; | grep 'x-executable; charset=binary' >> /opt/scripts/scan_results.txt
+find /var/www/ /var/tmp/ /var/lib/dav/ /tmp/ /dev/shm/ -type f -exec file -i '{}' \; | grep 'x-executable; charset=binary' >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "Binary file scan complete"
 echo
 
-# Files owned apache:apache  within /var/www/ /var/tmp/ /var/lib/dav/ /tmp/
+# Files owned apache:apache  within /var/www/ /var/tmp/ /var/lib/dav/ /tmp/ /dev/shm/
 # Note: need to update this section to include OS detection (cent and deb) to include the www-data user
 # Note: this portion will need filtering added as a pipe to 'grep -v' or blacklisting added to the find command. Until then, expect this to be verbose
 echo "Step 5 of 5"
-echo "Scanning for files and directories owned $webuser:$webuser within /tmp, /var/tmp, and /var/www . " 
-echo "Files and directories owned apache:apache within /tmp, /var/tmp, /var/lib/dav and /var/www:" >> /opt/scripts/scan_results.txt
+echo "Scanning for files and directories owned $webuser:$webuser within /tmp, /var/tmp, /var/www and /dev/shm/. " 
+echo "Files and directories owned apache:apache within /tmp, /var/tmp, /var/lib/dav, /var/www and /dev/shm:" >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit files:" >> /opt/scripts/scan_results.txt
-find /tmp/ /var/tmp/ /var/lib/dav/ /var/www/ -user $webuser -group $webuser | grep -v '.css\|.js' >> /opt/scripts/scan_results.txt
+find /tmp/ /var/tmp/ /var/lib/dav/ /var/www/ /dev/shm/ -user $webuser -group $webuser | grep -v '.css\|.js' >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "Scan complete. Results are in /opt/scripts/scan_results.txt"
