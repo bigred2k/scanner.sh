@@ -48,7 +48,7 @@ mkdir -p /opt/scripts/
 rm -rf /opt/scripts/scan_results.txt
 
 # Maldet results from last scan
-echo "Getting Maldet results from last scan"
+echo "Getting Maldet results from last scan and adding to /opt/scripts/scan_results.txt"
 echo "During a routine scan of your server, $hostname, we detected one or more suspicious files indicating the presence of malware on your server. Most often these are a result of an out of date or unpatched CMS, or unpatched plugins or themes.
 
 Due to security concerns, we ask that your team address this issue as soon as possible. In the event that we don't hear back that you have addressed the problematic files within the next 24 hours, we must quarantine them.
