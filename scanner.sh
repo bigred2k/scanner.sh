@@ -10,7 +10,7 @@ sendmailqueue="$(mailq | tail -n1 | awk '{print $3}')"
 postfixmailqueue="$(mailq | tail -n1 | awk '{print $5}')"
 webuser="unknown"
 arch="$(head -n1 /etc/issue)"
-
+maldethits="$(maldet -l | grep '\-\-report' | tail -n1 |awk '{print $NF}')"
 
 if [[ "$arch" == *"CentOS"* ]]; then
    webuser="apache"
@@ -79,7 +79,7 @@ Please note that it is not sufficient to simply restore from a recent backup, as
 
 The list of files our malware scanner found:" >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
-cat "$(locate "$(maldet -l | grep '\-\-report' | tail -n1 |awk '{print $NF}')" | grep hits)" >> /opt/scripts/scan_results.txt
+find /usr/local/maldetect/sess/ -name session.hits.$maldethits -exec cat {} \; >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "Complete"
