@@ -97,8 +97,8 @@ echo
 echo "Step 5 of 5"
 echo "Scanning for files and directories owned $webuser:$webuser within /tmp, /var/tmp, and /var/www . " 
 echo "Files and directories owned apache:apache within /tmp, /var/tmp, and /var/www:" >> /opt/scripts/scan_results.txt
-echo "These are typically malicious." >> /opt/scripts/scan_results.txt
-find /tmp/ /var/tmp/ /var/www/ -user $webuser -group $webuser >> /opt/scripts/scan_results.txt
+echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit files:" >> /opt/scripts/scan_results.txt
+find /tmp/ /var/tmp/ /var/www/ -user $webuser -group $webuser | grep -v '.css\|.js' >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "Scan complete. Results are in /opt/scripts/scan_results.txt"
