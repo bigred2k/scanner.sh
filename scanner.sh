@@ -132,8 +132,7 @@ echo >> /opt/scripts/scan_results.txt
 echo "Binary file scan complete"
 echo
 
-# Files owned apache:apache  within /var/www/ /var/tmp/ /var/lib/dav/ /tmp/ /dev/shm/
-# Note: need to update this section to include OS detection (cent and deb) to include the www-data user
+# Files owned apache:apache or www-data:www-data within /var/www/ /var/tmp/ /var/lib/dav/ /tmp/ /dev/shm/
 # Note: this portion will need filtering added as a pipe to 'grep -v' or blacklisting added to the find command. Until then, expect this to be verbose
 echo "Step 5 of 5"
 echo "Scanning for files and directories owned $webuser:$webuser within /tmp, /var/tmp, /var/www and /dev/shm/. " 
