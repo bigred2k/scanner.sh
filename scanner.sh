@@ -79,7 +79,7 @@ Please note that it is not sufficient to simply restore from a recent backup, as
 
 The list of files our malware scanner found:" >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
-find /usr/local/maldetect/sess/ -name session.hits.$maldethits -exec cat {} \; >> /opt/scripts/scan_results.txt
+find /usr/local/maldetect/sess/ -name session.hits."$maldethits" -exec cat {} \; >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "Complete"
