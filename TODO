@@ -22,4 +22,6 @@ grep -vi 'png$\|jpg$\|jpeg$\|pdf$\|gif$\|gz.info$\|doc$\|docx$\|cache\|twig'
 /usr/local/src/maldetect_bm/files/sigs/md5.dat
 /home/bmesh_admin/
 
--enumeration of PHP scripts that have been 'POST'ed to.
+-enumeration of PHP scripts that have been 'POST'ed to
+
+- 'ssdeep -drp /directory to scan/' function?
