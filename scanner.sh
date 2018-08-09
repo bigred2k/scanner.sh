@@ -12,7 +12,7 @@ webuser="unknown"
 arch="$(head -n1 /etc/issue)"
 maldethits="$(maldet -l | grep '\-\-report' | tail -n1 |awk '{print $NF}')"
 
-if [[ "$arch" == *"CentOS"* ]]; then
+if [[ "$arch" == *"CentOS"* ]] || [[ "$arch" == *"\S"* ]]; then
    webuser="apache"
 elif [[ "$arch" == *"Ubuntu"* ]]; then
    webuser="www-data"
