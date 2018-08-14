@@ -1,19 +1,25 @@
 TODO:
 
--cleanup output for last find:
 
-grep -vi 'png$\|jpg$\|jpeg$\|pdf$\|gif$\|gz.info$\|doc$\|docx$\|cache\|twig'
+Definitely:
+
+- breakup last find into 2 separates, 1 for directories (with a note in the output about this being a possible indicator a recrusive permissions reset on the docroot could be required) and 1 for files (heavily grep'd out)
+
+cleanup output for last find:
+
+grep -vi 'png$\|jpg$\|jpeg$\|pdf$\|gif$\|gz.info$\|doc$\|docx$\|cache\|twig' 
+find / -user apache -group apache 2>/dev/null | grep -vi 'png$\|jpg$\|jpeg$\|pdf$\|gif$\|gz.info$\|doc$\|docx$\|cache\|twig\|gluster\|proc'
 
 
 - add conditional to the cd function in the CMS updates process so that it 'echo's the current docroot to the console:
 
  if cd docroot; then pwd; else echo "Failed to cd into $docroot, does this directory exist"; fi for custom handling
 
-
- - make it easier to create new clamav signatures from malware samples which are currently undetected by maldet/clamav
-
 - add exclusions for the following locations when 'cat'ing maldet results into scan_results.txt
 
+/usr/share/clamav/rfxn.hdb
+/usr/share/clamav/rfxn.yara
+/usr/share/clamav/rfxn.ndb
 /var/lib/clamav/rfxn.hdb
 /var/lib/clamav/rfxn.ndb
 /usr/local/src/maldetect_bm/files/sigs/hex.dat
@@ -22,6 +28,18 @@ grep -vi 'png$\|jpg$\|jpeg$\|pdf$\|gif$\|gz.info$\|doc$\|docx$\|cache\|twig'
 /usr/local/src/maldetect_bm/files/sigs/md5.dat
 /home/bmesh_admin/
 
--enumeration of PHP scripts that have been 'POST'ed to
 
+- support for drupal multisite which I believe is lacking
+
+- support for showing the top x IPs to hit the server over the last x days
+
+- enumeration of PHP scripts that have been 'POST'ed to
+
+
+Maybes:
+- make it easier to create new clamav signatures from malware samples which are currently undetected by maldet/clamav
+
+
+Probably nots:
 - 'ssdeep -drp /directory to scan/' function?
+
