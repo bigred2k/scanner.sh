@@ -1,25 +1,19 @@
 TODO:
 
-
 Definitely:
-
-
 - add conditional to the cd function in the CMS updates process so that it 'echo's the current docroot to the console:
 
  if cd docroot; then pwd; else echo "Failed to cd into $docroot, does this directory exist"; fi for custom handling
 
-
 - support for drupal multisite which I believe is lacking
+
+Maybe:
+- make it easier to create new clamav signatures from malware samples which are currently undetected by maldet/clamav
 
 - support for showing the top x IPs to hit the server over the last x days
 
 - enumeration of PHP scripts that have been 'POST'ed to
 
-
-Maybes:
-- make it easier to create new clamav signatures from malware samples which are currently undetected by maldet/clamav
-
-
-Probably nots:
+Probably not:
 - 'ssdeep -drp /directory to scan/' function?
 
