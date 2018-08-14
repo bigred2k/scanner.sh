@@ -25,7 +25,7 @@ if [ -f "/opt/scripts/scan_results.txt" ]; then
   rm -rf /opt/scripts/scan_results.txt
 fi
 echo "Clean up complete."
-
+echo
 
 
 # Maldet scan
@@ -35,7 +35,7 @@ maldet -u
 freshclam
 maldet -a /
 echo "Maldet scan complete"
-
+echo
 
 # Maldet results from last scan
 echo "Step 3 of 9"
