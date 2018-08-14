@@ -79,7 +79,7 @@ Please note that it is not sufficient to simply restore from a recent backup, as
 
 The list of files our malware scanner found:" >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
-find /usr/local/maldetect/sess/ -name session.hits."$maldethits" -exec cat {} \; >> /opt/scripts/scan_results.txt
+find /usr/local/maldetect/sess/ -name session.hits."$maldethits" -exec cat | grep -v 'rfxn.ndb\|rfxn.hdb\|rfxn.yara\|hex.dat\|md5.dat\|\/home\/bmesh_admin' {} \; >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "Complete"
@@ -134,15 +134,31 @@ echo
 
 # Files owned apache:apache or www-data:www-data within /var/www/ /var/tmp/ /var/lib/dav/ /tmp/ /dev/shm/
 # Note: this portion will need filtering added as a pipe to 'grep -v' or blacklisting added to the find command. Until then, expect this to be verbose
-echo "Step 5 of 5"
-echo "Scanning for files and directories owned $webuser:$webuser within /tmp, /var/tmp, /var/www and /dev/shm/. " 
-echo "Files and directories owned apache:apache within /tmp, /var/tmp, /var/lib/dav, /var/www and /dev/shm:" >> /opt/scripts/scan_results.txt
+echo "Step 6 of 7"
+echo "Scanning for files owned $webuser:$webuser within /tmp, /var/tmp, /var/www and /dev/shm/. " 
+echo "Files owned apache:apache within /tmp, /var/tmp, /var/lib/dav, /var/www and /dev/shm:" >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit files:" >> /opt/scripts/scan_results.txt
-find /tmp/ /var/tmp/ /dev/shm/ /var/lib/dav/ /var/www/ -user $webuser -group $webuser | grep -v '.css\|.js' >> /opt/scripts/scan_results.txt
+find /tmp/ /var/tmp/ /dev/shm/ /var/lib/dav/ /var/www/ -type f -user $webuser -group $webuser | grep -v 'css$\|js$\|js.gz$\|css.gz$\|png$\|jpg$\|jpeg$\|pdf$\|gif$\|gz.info$\|doc$\|docx$\|cache\|twig\|gluster\|proc' >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "Scan complete. Results are in /opt/scripts/scan_results.txt"
 echo
+
+
+# Directories owned apache:apache or www-data:www-data within /var/www/ /var/tmp/ /var/lib/dav/ /tmp/ /dev/shm/
+# Note: this portion will need filtering added as a pipe to 'grep -v' or blacklisting added to the find command. Until then, expect this to be verbose
+echo "Step 7 of 7"
+echo "Scanning for directories owned $webuser:$webuser within /tmp, /var/tmp, /var/www and /dev/shm/. " 
+echo "Directories owned apache:apache within /tmp, /var/tmp, /var/lib/dav, /var/www and /dev/shm:" >> /opt/scripts/scan_results.txt
+echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit directories." >> /opt/scripts/scan_results.txt
+echo "A large number of directories here could indicate the need for a recursive permissions reset on the docroot." >> /opt/scripts/scan_results.txt
+find /tmp/ /var/tmp/ /dev/shm/ /var/lib/dav/ /var/www/ -type d -user $webuser -group $webuser  >> /opt/scripts/scan_results.txt
+echo >> /opt/scripts/scan_results.txt
+echo >> /opt/scripts/scan_results.txt
+echo "Scan complete. Results are in /opt/scripts/scan_results.txt"
+echo
+
+
 
 finish_time="$(date +%s)"
 
