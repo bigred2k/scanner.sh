@@ -5,7 +5,6 @@ docroots="$(cat /etc/httpd/conf.d/*.conf |grep DocumentRoot | grep -v '#'|awk '{
 hostname="$(hostname)"
 webuser="unknown"
 arch="$(head -n1 /etc/issue)"
-maldethits="$(maldet -l | grep '\-\-report' | tail -n1 |awk '{print $NF}')"
 
 if [[ "$arch" == *"CentOS"* ]] || [[ "$arch" == *"\S"* ]]; then
    webuser="apache"
@@ -50,6 +49,7 @@ Please note that it is not sufficient to simply restore from a recent backup, as
 
 The list of files our malware scanner found:" >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
+maldethits="$(maldet -l | grep '\-\-report' | tail -n1 |awk '{print $NF}')"
 find /usr/local/maldetect/sess/ -name session.hits."$maldethits" -exec cat {} \; | grep -v 'rfxn.ndb\|rfxn.hdb\|rfxn.yara\|hex.dat\|md5.dat\|\/home\/bmesh_admin' >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
