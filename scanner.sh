@@ -70,7 +70,7 @@ echo
 echo "Step 5 of 9"
 echo "Scanning for oustanding Drupal/Wordpress updates. This can take awhile, please be patient."
 echo "Here is a list of outstanding Drupal/Wordpress updates. If a module/theme/plugin is listed as having an update available, you will need to apply these ASAP, even if the provided module/theme/plugin is not in use:" >> /opt/scripts/scan_results.txt
-for docroot in $docroots; do echo ; cd "$docroot" ; pwd ; wp core version  --allow-root 2>/dev/null ; wp plugin list --allow-root 2>/dev/null | grep -i 'available' ; wp theme list --allow-root 2>/dev/null | grep -i 'available' ; drush up --security-only -n 2>/dev/null | grep -i 'SECURITY UPDATE available' ; done >> /opt/scripts/scan_results.txt
+for docroot in $docroots; do echo ; cd "$docroot" ; echo "###############################" ; pwd ; echo "###############################" ; wp core version  --allow-root 2>/dev/null ; wp plugin list --allow-root 2>/dev/null | grep -i 'available' ; wp theme list --allow-root 2>/dev/null | grep -i 'available' ; drush up --security-only -n 2>/dev/null | grep -i 'SECURITY UPDATE available' ; done >> /opt/scripts/scan_results.txt
 echo "CMS updates scanning complete."
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
@@ -89,7 +89,7 @@ echo "Searching for PHP files within /var/www/*/htdocs/wp-content/uploads/ and /
 echo "PHP files within /var/www/*/htdocs/wp-content/uploads/ and /var/www/*/htdocs/sites/default/files/ ." >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit files:" >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
-find /var/www/*/htdocs/wp-content/uploads/ /var/www/*/htdocs/sites/default/files/ -name "*.php" >> /opt/scripts/scan_results.txt
+find /var/www/*/htdocs/wp-content/uploads/ /var/www/*/htdocs/sites/default/files/ -name "*.php" -printf '%TY-%Tm-%Td %TT %p\n' | grep -vi 'cache\|twig' >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "PHP file scan complete"
@@ -113,21 +113,23 @@ echo "Step 8 of 9"
 echo "Scanning for files owned $webuser:$webuser within /tmp, /var/tmp, /var/www and /dev/shm/. " 
 echo "Files owned apache:apache within /tmp, /var/tmp, /var/lib/dav, /var/www and /dev/shm:" >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit files:" >> /opt/scripts/scan_results.txt
-find /tmp/ /var/tmp/ /dev/shm/ /var/lib/dav/ /var/www/ -type f -user $webuser -group $webuser | grep -v 'css$\|js$\|js.gz$\|css.gz$\|png$\|jpg$\|jpeg$\|pdf$\|gif$\|gz.info$\|doc$\|docx$\|cache\|twig\|gluster\|proc' >> /opt/scripts/scan_results.txt
+echo >> /opt/scripts/scan_results.txt
+find /tmp/ /var/tmp/ /dev/shm/ /var/lib/dav/ /var/www/ -type f -user $webuser -group $webuser -printf '%TY-%Tm-%Td %TT %p\n' | grep -v 'css$\|js$\|js.gz$\|css.gz$\|png$\|jpg$\|jpeg$\|pdf$\|gif$\|gz.info$\|doc$\|docx$\|cache\|twig\|gluster\|proc' >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "File scan complete."
 echo
 
 
-# Directories owned apache:apache or www-data:www-data within /var/www/ /var/tmp/ /var/lib/dav/ /tmp/ /dev/shm/
+# Directories owned apache:apache or www-data:www-data within /var/www/ /var/tmp/ /tmp/ /dev/shm/
 # Note: this portion will need filtering added as a pipe to 'grep -v' or blacklisting added to the find command. Until then, expect this to be verbose
 echo "Step 9 of 9"
 echo "Scanning for directories owned $webuser:$webuser within /tmp, /var/tmp, /var/www and /dev/shm/. " 
 echo "Directories owned apache:apache within /tmp, /var/tmp, /var/lib/dav, /var/www and /dev/shm:" >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit directories." >> /opt/scripts/scan_results.txt
 echo "A large number of directories here could indicate the need for a recursive permissions reset on the docroot." >> /opt/scripts/scan_results.txt
-find /tmp/ /var/tmp/ /dev/shm/ /var/lib/dav/ /var/www/ -type d -user $webuser -group $webuser  >> /opt/scripts/scan_results.txt
+echo >> /opt/scripts/scan_results.txt
+find /tmp/ /var/tmp/ /dev/shm/ /var/www/ -type d -user $webuser -group $webuser -printf '%TY-%Tm-%Td %TT %p\n' >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "Directory scan complete."
@@ -141,3 +143,4 @@ finish_time="$(date +%s)"
 #mail -s 'CMS updates for $hostname' user@hostname.tld < /opt/scripts/updates.txt
 
 echo "Time duration: $((finish_time - start_time)) secs."
+echo "Time duration: $((finish_time - start_time)) secs." >> /opt/scripts/scan_results.txt
