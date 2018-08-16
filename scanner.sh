@@ -101,7 +101,9 @@ echo "Searching for Binary files within /dev/shm, /var/tmp, /var/lib/dav, and /v
 echo "Binary files found within /dev/shm/, /var/tmp, /var/lib/dav, /tmp and /var/www/ . " >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit files:" >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
-find /dev/shm/ /var/tmp/ /var/lib/dav/ /tmp/ /var/www/ -type f -exec file -i '{}' \; | grep 'x-executable; charset=binary' >> /opt/scripts/scan_results.txt
+#find /dev/shm/ /var/tmp/ /var/lib/dav/ /tmp/ /var/www/ -type f -exec file -i '{}' \; | grep 'x-executable; charset=binary' >> /opt/scripts/scan_results.txt
+for file in `find /dev/shm/ /var/tmp/ /var/lib/dav/ /tmp/ /var/www/ -type f -exec file -i '{}' \; | grep 'x-executable; charset=binary' |awk '{print $1}' |cut -d ':' -f1`; do find $file -printf '%TY-%Tm-%Td %TT %p\n' | sort -r; done >> /opt/scripts/scan_results.txt
+
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "Binary file scan complete"
