@@ -70,7 +70,7 @@ echo
 echo "Step 5 of 9"
 echo "Scanning for oustanding Drupal/Wordpress updates. This can take awhile, please be patient."
 echo "Here is a list of outstanding Drupal/Wordpress updates. If a module/theme/plugin is listed as having an update available, you will need to apply these ASAP, even if the provided module/theme/plugin is not in use:" >> /opt/scripts/scan_results.txt
-for docroot in $docroots; do echo ; cd "$docroot" ; echo "###############################" ; pwd ; echo "###############################" ; wp core version  --allow-root 2>/dev/null ; wp plugin list --allow-root 2>/dev/null | grep -i 'available' ; wp theme list --allow-root 2>/dev/null | grep -i 'available' ; drush up --security-only -n 2>/dev/null | grep -i 'SECURITY UPDATE available' ; done >> /opt/scripts/scan_results.txt
+for docroot in $docroots; do echo ; cd "$docroot" ; echo "======================================" ; pwd ; echo "======================================" ; wp core version  --allow-root 2>/dev/null ; wp plugin list --allow-root 2>/dev/null | grep -i 'available' ; wp theme list --allow-root 2>/dev/null | grep -i 'available' ; drush up --security-only -n 2>/dev/null | grep -i 'SECURITY UPDATE available' ; done >> /opt/scripts/scan_results.txt
 echo "CMS updates scanning complete."
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
