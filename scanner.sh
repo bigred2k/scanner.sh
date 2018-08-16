@@ -89,7 +89,7 @@ echo "Searching for PHP files within /var/www/*/htdocs/wp-content/uploads/ and /
 echo "PHP files within /var/www/*/htdocs/wp-content/uploads/ and /var/www/*/htdocs/sites/default/files/ ." >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit files:" >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
-find /var/www/*/htdocs/wp-content/uploads/ /var/www/*/htdocs/sites/default/files/ -name "*.php" -printf '%TY-%Tm-%Td %TT %p\n' | grep -vi 'cache\|twig' >> /opt/scripts/scan_results.txt
+find /var/www/*/htdocs/wp-content/uploads/ /var/www/*/htdocs/sites/default/files/ -name "*.php" -printf '%TY-%Tm-%Td %TT %p\n' | sort -r | grep -vi 'cache\|twig' >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "PHP file scan complete"
@@ -114,7 +114,7 @@ echo "Scanning for files owned $webuser:$webuser within /tmp, /var/tmp, /var/www
 echo "Files owned apache:apache within /tmp, /var/tmp, /var/lib/dav, /var/www and /dev/shm:" >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit files:" >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
-find /tmp/ /var/tmp/ /dev/shm/ /var/lib/dav/ /var/www/ -type f -user $webuser -group $webuser -printf '%TY-%Tm-%Td %TT %p\n' | grep -v 'css$\|js$\|js.gz$\|css.gz$\|png$\|jpg$\|jpeg$\|pdf$\|gif$\|gz.info$\|doc$\|docx$\|cache\|twig\|gluster\|proc' >> /opt/scripts/scan_results.txt
+find /tmp/ /var/tmp/ /dev/shm/ /var/lib/dav/ /var/www/ -type f -user $webuser -group $webuser -printf '%TY-%Tm-%Td %TT %p\n' | sort -r | grep -vi 'css$\|js$\|js.gz$\|css.gz$\|png$\|jpg$\|jpeg$\|pdf$\|gif$\|gz.info$\|doc$\|docx$\|cache\|twig\|gluster\|proc' >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "File scan complete."
@@ -129,7 +129,7 @@ echo "Directories owned apache:apache within /tmp, /var/tmp, /var/lib/dav, /var/
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit directories." >> /opt/scripts/scan_results.txt
 echo "A large number of directories here could indicate the need for a recursive permissions reset on the docroot." >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
-find /tmp/ /var/tmp/ /dev/shm/ /var/www/ -type d -user $webuser -group $webuser -printf '%TY-%Tm-%Td %TT %p\n' >> /opt/scripts/scan_results.txt
+find /tmp/ /var/tmp/ /dev/shm/ /var/www/ -type d -user $webuser -group $webuser -printf '%TY-%Tm-%Td %TT %p\n' | sort -r >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 echo "Directory scan complete."
