@@ -114,6 +114,7 @@ echo "Step 8 of 9"
 echo "Scanning for files owned $webuser:$webuser within /tmp, /var/tmp, /var/www and /dev/shm/. " 
 echo "Files owned apache:apache within /tmp, /var/tmp, /var/lib/dav, /var/www and /dev/shm:" >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit files:" >> /opt/scripts/scan_results.txt
+echo "A large number of files here could indicate the need for a recursive permissions reset on the docroot." >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
 find /tmp/ /var/tmp/ /dev/shm/ /var/lib/dav/ /var/www/ -type f -user $webuser -group $webuser -printf '%TY-%Tm-%Td %TT %p\n' | sort -r | grep -vi 'css$\|js$\|js.gz$\|css.gz$\|png$\|jpg$\|jpeg$\|pdf$\|gif$\|gz.info$\|doc$\|docx$\|cache\|twig\|gluster\|proc' >> /opt/scripts/scan_results.txt
 echo >> /opt/scripts/scan_results.txt
