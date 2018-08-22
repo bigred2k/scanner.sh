@@ -3,7 +3,7 @@
 start_time="$(date +%s)"
 docroots="$(cat /etc/httpd/conf.d/*.conf |grep DocumentRoot | grep -v '#'|awk '{print $2}'|sort |uniq)"
 #The variable below can be used in place of the one above for non-standard conf file locations.
-#docroots="$(for line in `httpd -S|grep '.conf' |grep -v 'configuration:' | awk '{print $NF}'|cut -d '(' -f2-|cut -d ':' -f1|sort|uniq`; do cat $line|grep -i DocumentRoot |awk '{print $2}'; done)"
+#docroots="$(for line in `httpd -S|grep '.conf' |grep -v 'configuration:' | awk '{print $NF}'|cut -d '(' -f2-|cut -d ':' -f1|sort|uniq`; do cat $line|grep -v '^#'|grep -i DocumentRoot |awk '{print $2}'; done|sort|uniq)"
 hostname="$(hostname)"
 webuser="unknown"
 arch="$(head -n1 /etc/issue)"
