@@ -1,0 +1,27 @@
+TODO:
+
+Definitely:
+- add conditional to the cd function in the CMS updates process so that it 'echo's the current docroot to the console:
+
+ if cd docroot; then pwd; else echo "Failed to cd into $docroot, does this directory exist"; fi for custom handling
+
+- support for drupal multisite which I believe is lacking
+
+- Add the following blurbs (rewrite if needed) to the CMS updates section:
+
+Please also let us know if you need any assistance with malicious file removal or CMS updates.
+
+The page at https://www.drupal.org/security is another highly recommended resource. In addition to the news page and sub-tabs, all security announcements are posted to an email list. To subscribe to email: log in, go to your user profile page and subscribe to the security newsletter on the Edit » My newsletters tab.
+You can also get rss feeds for core, contrib, or public service announcements or follow @drupalsecurity on Twitter.
+
+
+Maybe:
+- make it easier to create new clamav signatures from malware samples which are currently undetected by maldet/clamav
+
+- support for showing the top x IPs to hit the server over the last x days
+
+- enumeration of PHP scripts that have been 'POST'ed to
+
+Probably not:
+- 'ssdeep -drp /directory to scan/' function?
+
