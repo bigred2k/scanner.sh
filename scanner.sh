@@ -16,7 +16,7 @@ fi
 
 
 # Clean up from last run
-echo "Step 1 of 9"
+echo "Step 1 of 11"
 echo "Cleaning up from last run"
 if [ ! -d "/opt/scripts/" ]; then
   mkdir -p /opt/scripts/
@@ -29,8 +29,48 @@ echo "Clean up complete."
 echo
 
 
+# Install RKHunter
+echo "Step 2 of 11"
+if [[ "$arch" == *"CentOS"* ]] || [[ "$arch" == *"\S"* ]]; then
+  yum install rkhunter -y
+elif [[ "$arch" == *"Ubuntu"* ]]; then
+  apt-get install rkhunter -y
+fi
+
+sed 's/#ALLOW_SSH_ROOT_USER=no/ALLOW_SSH_ROOT_USER=without-password/g' /etc/rkhunter.conf
+
+# Run rkhunter
+echo 'Running RKHunter'
+echo 'RKhunter results:'
+echo
+rkhunter --check --logfile /opt/scripts/rkhunter.log --noappend-log --skip-keypress --report-warnings-only | grep -v "'bmesh_admin' is root equivalent" >> /opt/scripts/scan_results.txt
+echo "RKHunter scan complete, full log is at /opt/scripts/rkhunter.log" >> /opt/scripts/scan_results.txt
+echo "RKhunter scan complete"
+echo
+echo
+
+
+# Download and compile chkrootkit
+echo "Step 3 of 11"
+mkdir /opt/scripts/
+cd /opt/scripts/
+wget ftp://ftp.pangeia.com.br/pub/seg/pac/chkrootkit.tar.gz
+tar -xzvpf chkrootkit.tar.gz
+cd chkrootkit-0.52/
+make
+
+# Run chkrootkit in quiet mode
+echo "Running chkrootkit"
+echo "Chkrootkit resuts:"
+echo
+/opt/scripts/chkrootkit -q >> /opt/scripts/scan_results.txt
+echo "chkrootkit scan complete."
+echo
+echo
+
+
 # Maldet scan
-echo "Step 2 of 9"
+echo "Step 4 of 11"
 echo "Scanning with maldet. This could take awhile."
 maldet -u
 freshclam
@@ -39,7 +79,7 @@ echo "Maldet scan complete"
 echo
 
 # Maldet results from last scan
-echo "Step 3 of 9"
+echo "Step 5 of 11"
 echo "Getting Maldet results from last scan and adding to /opt/scripts/scan_results.txt"
 echo "During a routine scan of your server, $hostname, we detected one or more suspicious files indicating the presence of malware on your server. Most often these are a result of an out of date or unpatched CMS, or unpatched plugins or themes.
 
@@ -61,7 +101,7 @@ echo
 
 
 # Docroot enumeration
-echo "Step 4 of 9"
+echo "Step 6 of 11"
 echo "Enumerating docroots"
 echo "Docroots found in /etc/httpd/conf.d/*.conf:"
 echo "$docroots"
@@ -69,7 +109,7 @@ echo "Docroot enumeration complete"
 echo
 
 
-echo "Step 5 of 9"
+echo "Step 7 of 11"
 echo "Scanning for oustanding Drupal/Wordpress updates. This can take awhile, please be patient."
 echo "Here is a list of outstanding CMS updates we were able to identify. If a module/theme/plugin is listed as having an update available, you will need to apply these. Please note that this applies even if the provided module/theme/plugin is not in use. If you need any assistance with applying updates, or would like to receive an email listing outstanding CMS updates on a regular basis, just let us know." >> /opt/scripts/scan_results.txt
 for docroot in $docroots; do echo ; cd "$docroot" ; echo "======================================" ; pwd ; echo "======================================" ; wp core version  --allow-root 2>/dev/null ; wp plugin list --allow-root 2>/dev/null | grep -i 'available' ; wp theme list --allow-root 2>/dev/null | grep -i 'available' ; drush up --security-only -n 2>/dev/null | grep -i 'SECURITY UPDATE available' ; done >> /opt/scripts/scan_results.txt
@@ -86,7 +126,7 @@ echo >> /opt/scripts/scan_results.txt
 
 
 # PHP files in /uploads/ or /files/
-echo "Step 6 of 9"
+echo "Step 8 of 11"
 echo "Searching for PHP files within /var/www/*/htdocs/wp-content/uploads/ and /var/www/*/htdocs/sites/default/files/ ."
 echo "PHP files within /var/www/*/htdocs/wp-content/uploads/ and /var/www/*/htdocs/sites/default/files/ ." >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit files:" >> /opt/scripts/scan_results.txt
@@ -98,7 +138,7 @@ echo "PHP file scan complete"
 echo
 
 # Binaries within /var/www/ /var/tmp/ /var/lib/dav/ /tmp/ and /dev/shm/
-echo "Step 7 of 9"
+echo "Step 9 of 11"
 echo "Searching for Binary files within /dev/shm, /var/tmp, /var/lib/dav, and /var/www/ . This can take awhile, please be patient. " 
 echo "Binary files found within /dev/shm/, /var/tmp, /var/lib/dav, /tmp and /var/www/ . " >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit files:" >> /opt/scripts/scan_results.txt
@@ -112,7 +152,7 @@ echo
 
 # Files owned apache:apache or www-data:www-data within /var/www/ /var/tmp/ /var/lib/dav/ /tmp/ /dev/shm/
 # Note: this portion will need filtering added as a pipe to 'grep -v' or blacklisting added to the find command. Until then, expect this to be verbose
-echo "Step 8 of 9"
+echo "Step 10 of 11"
 echo "Scanning for files owned $webuser:$webuser within /tmp, /var/tmp, /var/www and /dev/shm/. " 
 echo "Files owned apache:apache within /tmp, /var/tmp, /var/lib/dav, /var/www and /dev/shm:" >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit files:" >> /opt/scripts/scan_results.txt
@@ -127,7 +167,7 @@ echo
 
 # Directories owned apache:apache or www-data:www-data within /var/www/ /var/tmp/ /tmp/ /dev/shm/
 # Note: this portion will need filtering added as a pipe to 'grep -v' or blacklisting added to the find command. Until then, expect this to be verbose
-echo "Step 9 of 9"
+echo "Step 11 of 11"
 echo "Scanning for directories owned $webuser:$webuser within /tmp, /var/tmp, /var/www and /dev/shm/. " 
 echo "Directories owned apache:apache within /tmp, /var/tmp, /var/lib/dav, /var/www and /dev/shm:" >> /opt/scripts/scan_results.txt
 echo "These can be malicious and should be reviewed manually and removed if they are indeed non-legit directories." >> /opt/scripts/scan_results.txt
