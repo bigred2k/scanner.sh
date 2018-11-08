@@ -31,7 +31,7 @@ echo
 
 # Install RKHunter
 echo "Step 2 of 11"
-echo 'Running RKHunter'
+echo "Running RKHunter"
 
 if [[ "$arch" == *"CentOS"* ]] || [[ "$arch" == *"\S"* ]]; then
   yum install rkhunter -y
@@ -42,10 +42,10 @@ fi
 sed -i 's/#ALLOW_SSH_ROOT_USER=no/ALLOW_SSH_ROOT_USER=without-password/g' /etc/rkhunter.conf
 
 # Run rkhunter
-echo 'Running RKHunter'
-echo 'RKhunter results:'
+echo "RKhunter results:" >> /opt/scripts/scan_results.txt
 echo
 rkhunter --check --logfile /opt/scripts/rkhunter.log --noappend-log --skip-keypress --report-warnings-only | grep -v "'bmesh_admin' is root equivalent" >> /opt/scripts/scan_results.txt
+echo
 echo "RKHunter scan complete, full log is at /opt/scripts/rkhunter.log" >> /opt/scripts/scan_results.txt
 echo "RKhunter scan complete"
 echo
