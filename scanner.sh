@@ -31,6 +31,8 @@ echo
 
 # Install RKHunter
 echo "Step 2 of 11"
+echo 'Running RKHunter'
+
 if [[ "$arch" == *"CentOS"* ]] || [[ "$arch" == *"\S"* ]]; then
   yum install rkhunter -y
 elif [[ "$arch" == *"Ubuntu"* ]]; then
