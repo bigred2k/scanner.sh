@@ -37,7 +37,7 @@ elif [[ "$arch" == *"Ubuntu"* ]]; then
   apt-get install rkhunter -y
 fi
 
-sed 's/#ALLOW_SSH_ROOT_USER=no/ALLOW_SSH_ROOT_USER=without-password/g' /etc/rkhunter.conf
+sed -i 's/#ALLOW_SSH_ROOT_USER=no/ALLOW_SSH_ROOT_USER=without-password/g' /etc/rkhunter.conf
 
 # Run rkhunter
 echo 'Running RKHunter'
