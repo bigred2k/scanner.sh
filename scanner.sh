@@ -63,7 +63,7 @@ make
 echo "Running chkrootkit"
 echo "Chkrootkit resuts:"
 echo
-/opt/scripts/chkrootkit -q >> /opt/scripts/scan_results.txt
+/opt/scripts/chkrootkit-0.52/chkrootkit -q >> /opt/scripts/scan_results.txt
 echo "chkrootkit scan complete."
 echo
 echo
