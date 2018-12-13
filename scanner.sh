@@ -47,7 +47,7 @@ echo "Step 2 of 13"
 echo "Running RKHunter"
 
 if [[ "$arch" == *"CentOS"* ]] || [[ "$arch" == *"\S"* ]]; then
-  yum install rkhunter -y
+  yum install rkhunter glibc-static -y
 elif [[ "$arch" == *"Ubuntu"* ]]; then
   apt-get install rkhunter -y
 fi
@@ -57,6 +57,7 @@ sed -i 's/#ALLOW_SSH_ROOT_USER=no/ALLOW_SSH_ROOT_USER=without-password/g' /etc/r
 
 
 # Download and compile chkrootkit
+
 echo "Step 3 of 13"
 mkdir /home/bmesh_admin/
 cd /home/bmesh_admin/
