@@ -63,7 +63,7 @@ mkdir /home/bmesh_admin/
 cd /home/bmesh_admin/
 wget ftp://ftp.pangeia.com.br/pub/seg/pac/chkrootkit.tar.gz
 tar -xzvpf chkrootkit.tar.gz
-cd chkrootkit-0.52/ && make
+cd chkrootkit-0.53/ && make
 
 
 
